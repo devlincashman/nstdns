@@ -27,7 +27,7 @@ jobs:
         with:
           images: ghcr.io/devlincashman/ntsdns
           tags: type=sha,enable=true,priority=100,prefix=,suffix=,format=short
-          flavor: latest=auto
+          flavor: latest=true
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v3

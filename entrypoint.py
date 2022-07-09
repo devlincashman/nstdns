@@ -19,16 +19,12 @@ godaddy_headers = {
 }
 
 while True:
-    godaddy_response = requests.get(
+    godaddy_ip = requests.get(
         f"https://api.godaddy.com/v1/domains/{DOMAIN}/records/{TYPE}/{NAME}",
         headers=godaddy_headers,
-    )
-    godaddy_json = godaddy_response.json()
-    godaddy_ip = godaddy_json[0]["data"]
+    ).json()[0]["data"]
 
-    home_response = requests.get("http://ipinfo.io/json")
-    home_json = home_response.json()
-    home_ip = home_json["ip"]
+    home_ip = requests.get("http://ipinfo.io/json").json()["ip"]
 
     if godaddy_ip != home_ip:
         print(

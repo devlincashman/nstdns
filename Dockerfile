@@ -16,9 +16,6 @@ RUN groupadd -g 1000 -r ntsdns && useradd -u 1000 --no-log-init -r -g ntsdns nts
 
 USER ntsdns
 
-WORKDIR /app
-
 COPY entrypoint.py ./
 
-# using tini https://github.com/krallin/tini
 ENTRYPOINT [ "/app/tini", "--", "python", "/app/entrypoint.py"]

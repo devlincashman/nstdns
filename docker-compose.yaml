@@ -1,0 +1,12 @@
+version: "3.8"
+services:
+  godaddy-dns:
+    image: godaddy-dns
+    container_name: godaddy-dns
+    restart: unless-stopped
+    environment:
+      KEY: godaddy_api_key_here
+      SECRET: godaddy_api_secret_here
+      DOMAIN: example.com
+      FREQUENCY: 15
+      NAME: examplesubdomain

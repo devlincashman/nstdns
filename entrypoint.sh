@@ -19,27 +19,36 @@ set -euo pipefail
 # Expected environment variables, with some defaults:
 #
 # DOMAIN                # domain name you want to update, e.g., "example.com"
-TYPE=${TYPE:-"A"}       # record type, e.g., "A"
-NAME=${NAME:-"@"}       # name of the record to update, e.g., "@"
-TTL=${TTL:-"1800"}      # time to live, seconds, e.g., "1800"
-PORT=${PORT:-"1"}       # required port, e.g., "1"
-WEIGHT=${WEIGHT:-"1"}   # required weight, e.g., "1"
+TYPE=${TYPE:-"A"}     # record type, e.g., "A"
+NAME=${NAME:-"@"}     # name of the record to update, e.g., "@"
+TTL=${TTL:-"1800"}    # time to live, seconds, e.g., "1800"
+PORT=${PORT:-"1"}     # required port, e.g., "1"
+WEIGHT=${WEIGHT:-"1"} # required weight, e.g., "1"
 # KEY                   # KEY for accessing GoDaddy developer API
 # SECRET                # SECRET for the above KEY
-PHASE=${PHASE:-"0"}     # initial sleep before script execution
-                        #   useful for shifting phase in case of multiple script executing
-                        #   at the same time
+PHASE=${PHASE:-"0"} # initial sleep before script execution
+#   useful for shifting phase in case of multiple script executing
+#   at the same time
 #
 # usually no need to modify beyond this point
 #
-[ "$(id -u)" -eq 0 ] && echo "Please run without root priviledges." && exit 1
-
-sleep "${PHASE}"
-
+DOMAIN="cashman.me"
+TYPE="A"
+NAME="0x80"
+KEY="2uL2Bebdeg_6N9iBHHT9SWUhNzsyFK7Qs"
+SECRET="WVuXnXYBR6LNnmbmYuYwyV"
+HEADER="Authorization: sso-key $KEY:$SECRET"
 # get IP currently assigned to the selected DNS record
+
+curl -s -X GET -H "${HEADER}" "https://api.godaddy.com/v1/domains/${DOMAIN}/records/${TYPE}/${NAME}" | jq -r "[].data"
+
+curl -s -X GET -H "${HEADER}" "https://api.godaddy.com/v1/domains/${DOMAIN}/records/${TYPE}/${NAME}" | jq -r ".[].data"
+
+
 get_dns_ip() {
-      RET=$(${CURL} -s -X GET -H "${HEADER}" "https://api.godaddy.com/v1/domains/${DOMAIN}/records/${TYPE}/${NAME}")
+      RET=$(curl -s -X GET -H "${HEADER}" "https://api.godaddy.com/v1/domains/${DOMAIN}/records/${TYPE}/${NAME}")
       DNS_IP=$(echo "${RET}" | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b")
+      echo "GoDaddy DNS IP: ${DNS_IP}"
 }
 
 CURL="curl --silent -m 30" # set timeout for each curl call to 30s
@@ -48,10 +57,11 @@ HEADER="Authorization: sso-key $KEY:$SECRET"
 # get current public IP address
 RET=$(${CURL} -s GET "http://ipinfo.io/json")
 ISP_IP=$(echo "${RET}" | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b")
+echo "Home Router IP: ${ISP_IP}"
 
 get_dns_ip
 if [ "${DNS_IP}" != "${ISP_IP}" ]; then
-      echo "DNS IP: ${DNS_IP}, ISP IP: $ISP_IP. Updating DNS record..."
+      echo "DNS IP: ${DNS_IP} and ISP IP: $ISP_IP are different!. Updating DNS record..."
       ${CURL} -X PUT "https://api.godaddy.com/v1/domains/${DOMAIN}/records/${TYPE}/${NAME}" \
             -H "accept: application/json" \
             -H "Content-Type: application/json" \
@@ -66,4 +76,5 @@ elif [ -z "${DNS_IP}" ] | [ -z "${ISP_IP}" ]; then
       echo "FAILURE! Unable to read current status (DNS IP: \"${DNS_IP}\", ISP IP: \"$ISP_IP\")"
       exit 1
 fi
-echo "OK"
+
+echo "No change detected - $(date)"

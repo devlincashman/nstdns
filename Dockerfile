@@ -12,9 +12,9 @@ COPY requirements.txt ./
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-RUN groupadd -g 1000 -r godaddy && useradd -u 1000 --no-log-init -r -g godaddy godaddy
+RUN groupadd -g 1000 -r ntsdns && useradd -u 1000 --no-log-init -r -g ntsdns ntsdns
 
-USER godaddy
+USER ntsdns
 
 WORKDIR /app
 

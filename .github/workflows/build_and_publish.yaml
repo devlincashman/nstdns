@@ -26,7 +26,7 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: ghcr.io/devlincashman/ntsdns
-          tags: type=sha
+          tags: type=sha,enable=true,priority=100,prefix=,suffix=,format=short
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v3

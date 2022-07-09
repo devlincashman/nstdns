@@ -1,6 +1,6 @@
 version: "3.8"
 services:
-  godaddy-dns:
+  ntsdns:
     image: ghcr.io/devlincashman/ntsdns:latest
     container_name: ntsdns
     restart: unless-stopped

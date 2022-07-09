@@ -5,8 +5,8 @@ services:
     container_name: ntsdns
     restart: unless-stopped
     environment:
-      KEY: godaddy_api_key_here
-      SECRET: godaddy_api_secret_here
+      KEY: godaddy_api_key
+      SECRET: godaddy_api_secret
       DOMAIN: example.com
       FREQUENCY: 15
       NAME: examplesubdomain

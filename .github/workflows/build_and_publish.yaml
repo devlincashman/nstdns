@@ -2,10 +2,11 @@ name: Build and Publish Docker image
 
 on:
   push:
+    main
 
 jobs:
   build_and_push:
-    name: Push Docker image to Docker Hub
+    name: Build and Push to ghcr.io
     runs-on: ubuntu-latest
     steps:
       - name: Set up Docker Buildx

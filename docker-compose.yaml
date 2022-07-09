@@ -8,5 +8,6 @@ services:
       KEY: godaddy_api_key
       SECRET: godaddy_api_secret
       DOMAIN: example.com
-      FREQUENCY: 15
       NAME: examplesubdomain
+      FREQUENCY: 15 # This is how many minutes between checks, defaults to 15
+      TYPE: A # Supports most DNS record types, defaults to A

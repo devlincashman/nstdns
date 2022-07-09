@@ -1,8 +1,7 @@
 name: Build and Publish Docker image
 
 on:
-  release:
-    types: [published]
+  push:
 
 jobs:
   build_and_push_to_registry:

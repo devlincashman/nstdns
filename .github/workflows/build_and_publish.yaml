@@ -25,13 +25,12 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: devlincashman/ntsdns
+          images: ghcr.io/devlincashman/ntsdns
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v3
         with:
           push: true
           platforms: linux/amd64,linux/arm64
-          tags: ghcr.io/devlincashman/ntsdns:latest
-          # tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

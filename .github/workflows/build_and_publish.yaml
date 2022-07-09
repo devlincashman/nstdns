@@ -32,6 +32,6 @@ jobs:
         with:
           push: true
           platforms: linux/amd64,linux/arm64
-          tags: devlincashman/ntsdns:latest
+          tags: ghcr.io/devlincashman/ntsdns:latest
           # tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

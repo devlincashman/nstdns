@@ -1,8 +1,8 @@
 version: "3.8"
 services:
   godaddy-dns:
-    image: godaddy-dns
-    container_name: godaddy-dns
+    image: ghcr.io/devlincashman/ntsdns:latest
+    container_name: ntsdns
     restart: unless-stopped
     environment:
       KEY: godaddy_api_key_here
